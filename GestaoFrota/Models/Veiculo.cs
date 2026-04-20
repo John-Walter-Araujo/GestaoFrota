@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GestaoFrota.Models;
+using System;
 using System.Text.Json.Serialization;
 
 namespace GestaoFrota.Models
 {
-    // Configrando o polimorfismo para o System.Text.Json
+    // Configurando polimorfismo para o System.Text.Json
     [JsonDerivedType(typeof(Carro), typeDiscriminator: "carro")]
-    [JsonDerivedType(typeof(Caminhao), typeDiscriminator: "caminhao")]
-
+    [JsonDerivedType(typeof(Caminhao), typeDiscriminator:
+   "caminhao")]
     public abstract class Veiculo
     {
         public Guid Id { get; set; }
@@ -23,16 +20,18 @@ namespace GestaoFrota.Models
             get => _ano;
             set
             {
-                if (value < 1900 || value > DateTime.Now.Year + 1)
-                {
-                    throw new ArgumentException("Ano do veículo inválido");
+                if (value != 0 && (value < 1900 || value > DateTime.Now.Year + 1))
+                    throw new ArgumentException("Ano do veículo inválido.");
+                   
                     _ano = value;
-                }
             }
         }
+
         public decimal ValorDiariaBase { get; set; }
-        
-        protected Veiculo(string placa, string modelo, int ano, decimal valorDiariaBase)
+
+        protected Veiculo(string placa, string modelo, int ano,
+       decimal valorDiariaBase)
+
         {
             Id = Guid.NewGuid();
             Placa = placa;
@@ -42,6 +41,6 @@ namespace GestaoFrota.Models
         }
 
         public abstract decimal CalcularCustoAluguel(int dias);
-        public virtual string ObterDescricao() => $"{Modelo} ({Ano}) - Placa: {Placa}";
-    }
-}
+
+        public virtual string ObterDescricao() => $"{Modelo}({Ano}) -Placa: { Placa}";}
+ }
